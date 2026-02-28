@@ -25,6 +25,18 @@ vim_mock.fn = {
   chansend = function() end,
   jobstart = function() return 1 end,
   jobstop = function() end,
+  fnamemodify = function(path, mods)
+    if mods == ':p' then
+      -- 簡易的な絶対パス変換（テスト用）
+      if path:sub(1, 1) == '/' then return path end
+      return '/mock/' .. path
+    elseif mods == ':h' then
+      -- ディレクトリ部分を返す
+      return path:match('(.+)/') or '.'
+    end
+    return path
+  end,
+  line = function() return 1 end,
   json_encode = function(v)
     -- 簡易 JSON エンコード (テスト用)
     if type(v) == "table" then

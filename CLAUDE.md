@@ -15,6 +15,7 @@
 - 調査や分析は、sub agent を起動し、そちらに任せる事。sub agent は、 @./tmp/ に調査や分析を行なった結果を markdown で出力すること。
 - 作った `git worktree` は `git worktree remove` で最後に削除する事。
 - `commit message` は日本語で3種類程度提案する事。 conventional commits を守る事。
+- **厳守**: ベストなAの方法と、次善策のBがあった場合、すぐにBに行かず、Aで行く方法をしつこく調査する事。Bに行きたい場合は、こちらに相談する事。
 
 ## 実装
 

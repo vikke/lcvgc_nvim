@@ -124,6 +124,7 @@ end
 |-----|------|--------|
 | `Ctrl-E` | Visual | Evaluate the selected range |
 | `Ctrl-E` | Normal | Automatically select and evaluate the current paragraph (delimited by blank lines) |
+| `Ctrl-Shift-E` | Normal | Evaluate entire file (with include expansion + source map) |
 
 ```lua
 vim.keymap.set('v', '<C-e>', function() M.eval_selection() end)
@@ -167,6 +168,127 @@ function M.send(lines)
     source = text,
   })
   vim.fn.chansend(handle, payload .. "\n")
+end
+```
+
+### 5.4 Evaluating the Entire File (Include Expansion + Source Map)
+
+Evaluates the entire file. Recursively expands `include "path.cvg"` directives and sends the expanded text to the engine. Error line numbers from the engine are reverse-mapped through the source map to display the original file:line information.
+
+#### Command
+
+| Command | Action |
+|---------|--------|
+| `:LcvgcEvalFile` | Evaluate entire current buffer (with include expansion) |
+
+Key mapping: `<C-S-e>` (Normal mode)
+
+#### Include Expansion Mechanism
+
+1. Get all text from the buffer
+2. Scan each line and detect lines matching `include "path.cvg"`
+3. Resolve the path relative to the current file
+4. Read the target file and recursively apply the same expansion process
+5. Build a source map (expanded line number → original file path:original line number) during expansion
+
+#### Duplicate Include Detection
+
+Maintains a set of visited files during expansion. If the same file is included again, the second and subsequent occurrences are silently skipped. This matches the engine's behavior.
+
+```lua
+-- Duplicate includes are skipped (same behavior as engine)
+if visited[abs_path] then
+  -- Second and subsequent includes are ignored
+  goto continue
+end
+```
+
+#### Source Map
+
+Records which file and line number each line in the expanded text corresponds to.
+
+```lua
+-- Source map data structure
+-- source_map[expanded_line_number] = { file = "path/to/file.cvg", line = original_line_number }
+```
+
+When an error response is received from the engine, the error line number is reverse-looked up through the source map and displayed with the original file name and line number.
+
+```
+ERR drums.cvg:5: unexpected token 'xyz'
+```
+
+#### Implementation Sketch
+
+```lua
+function M.eval_file()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local filepath = vim.api.nvim_buf_get_name(bufnr)
+  local dir = vim.fn.fnamemodify(filepath, ':h')
+
+  local expanded, source_map = M.expand_includes(lines, filepath, dir, {})
+  if not expanded then return end
+
+  local text = table.concat(expanded, '\n')
+  connection.send({
+    type = 'eval',
+    source = text,
+  })
+
+  -- Keep source_map for reverse-lookup on error responses
+  M._last_source_map = source_map
+end
+
+function M.expand_includes(lines, filepath, base_dir, visited)
+  local abs_path = vim.fn.fnamemodify(filepath, ':p')
+  if visited[abs_path] then
+    -- Duplicate includes are skipped (same behavior as engine)
+    return {}, {}
+  end
+  visited[abs_path] = true
+
+  local expanded = {}
+  local source_map = {}
+
+  for i, line in ipairs(lines) do
+    local include_path = line:match('^%s*include%s+"([^"]+)"')
+    if include_path then
+      local full_path = base_dir .. '/' .. include_path
+      local inc_lines = M.read_file(full_path)
+      if inc_lines then
+        local inc_dir = vim.fn.fnamemodify(full_path, ':h')
+        local inc_expanded, inc_map = M.expand_includes(inc_lines, full_path, inc_dir, visited)
+        if inc_expanded then
+          for j, el in ipairs(inc_expanded) do
+            table.insert(expanded, el)
+            table.insert(source_map, inc_map[j])
+          end
+        end
+      else
+        vim.notify('lcvgc: include not found: ' .. full_path, vim.log.levels.ERROR)
+        return nil, nil
+      end
+    else
+      table.insert(expanded, line)
+      table.insert(source_map, { file = filepath, line = i })
+    end
+  end
+
+  return expanded, source_map
+end
+```
+
+#### Error Display with Source Map Reverse-Lookup
+
+```lua
+-- In display.lua's on_message, reference the source map
+if is_error and eval._last_source_map then
+  local entry = eval._last_source_map[msg.line]
+  if entry then
+    -- Display with original file name and line number
+    table.insert(lines, 'ERR ' .. vim.fn.fnamemodify(entry.file, ':t') .. ':' .. entry.line .. ': ' .. (msg.message or ''))
+  end
 end
 ```
 
@@ -274,6 +396,7 @@ vim.filetype.add({
 | `:LcvgcConnect [port]` | Connect to the engine (default: 9876) |
 | `:LcvgcDisconnect` | Disconnect from the engine |
 | `:LcvgcStatus` | Display engine status (connection state, currently playing scene, etc.) |
+| `:LcvgcEvalFile` | Evaluate entire current buffer (with include expansion + source map) |
 | `:LcvgcStop` | Stop all (shortcut for evaluating `stop`) |
 | `:LcvgcLayout` | Build the 3-pane layout |
 | `:LcvgcMicStart [options]` | Start microphone input. Inserts detected note names at cursor position. Options: `--quantize N`, `--key c`, `--scale minor`, etc. |

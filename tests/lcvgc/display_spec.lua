@@ -36,6 +36,28 @@ describe("lcvgc.display", function()
       display.on_message({ type = "error", message = "unknown" })
       assert.equals("ERR line ?: unknown", set_lines_calls[1].lines[1])
     end)
+
+    it("ソースマップがある場合はファイル名:行番号で表示する", function()
+      local eval = require("lcvgc.eval")
+      eval._last_source_map = {
+        [1] = { file = "main.cvg", line = 1 },
+        [2] = { file = "header.cvg", line = 3 },
+        [3] = { file = "main.cvg", line = 2 },
+      }
+      display.on_message({ type = "error", line = 2, message = "bad note" })
+      assert.equals("ERR header.cvg:3: bad note", set_lines_calls[1].lines[1])
+      eval._last_source_map = nil
+    end)
+
+    it("ソースマップの範囲外の場合は通常フォーマット", function()
+      local eval = require("lcvgc.eval")
+      eval._last_source_map = {
+        [1] = { file = "main.cvg", line = 1 },
+      }
+      display.on_message({ type = "error", line = 99, message = "oops" })
+      assert.equals("ERR line 99: oops", set_lines_calls[1].lines[1])
+      eval._last_source_map = nil
+    end)
   end)
 
   describe("on_message - 正常応答", function()

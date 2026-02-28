@@ -63,6 +63,10 @@ function M.setup(opts)
     vim.notify(table.concat(lines, '\n'), vim.log.levels.INFO)
   end, {})
 
+  vim.api.nvim_create_user_command('LcvgcEvalFile', function()
+    eval.eval_file()
+  end, {})
+
   vim.api.nvim_create_user_command('LcvgcStop', function()
     connection.send({ type = 'eval', source = 'stop' })
   end, {})
@@ -125,6 +129,10 @@ function M.setup(opts)
   vim.keymap.set('n', '<C-e>', function()
     eval.eval_paragraph()
   end, { desc = 'lcvgc: eval paragraph' })
+
+  vim.keymap.set('n', '<C-S-e>', function()
+    eval.eval_file()
+  end, { desc = 'lcvgc: eval file (with include expansion)' })
 end
 
 return M

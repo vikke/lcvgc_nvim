@@ -35,7 +35,15 @@ function M.on_message(msg)
   local is_error = msg.type == 'error'
 
   if is_error then
-    table.insert(lines, 'ERR line ' .. (msg.line or '?') .. ': ' .. (msg.message or ''))
+    local eval = require('lcvgc.eval')
+    local sm = eval._last_source_map
+    local err_line = msg.line
+    if sm and err_line and sm[err_line] then
+      local entry = sm[err_line]
+      table.insert(lines, 'ERR ' .. entry.file .. ':' .. entry.line .. ': ' .. (msg.message or ''))
+    else
+      table.insert(lines, 'ERR line ' .. (err_line or '?') .. ': ' .. (msg.message or ''))
+    end
   else
     table.insert(lines, 'OK ' .. (msg.block or '') .. ':' .. (msg.name or ''))
     if msg.warnings then

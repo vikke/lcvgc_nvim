@@ -124,6 +124,7 @@ end
 |------|--------|------|
 | `Ctrl-E` | ビジュアル | 選択範囲をevalする |
 | `Ctrl-E` | ノーマル | 現在の段落（空行区切り）を自動選択してevalする |
+| `Ctrl-Shift-E` | ノーマル | ファイル全体をeval（include展開 + ソースマップ付き） |
 
 ```lua
 vim.keymap.set('v', '<C-e>', function() M.eval_selection() end)
@@ -167,6 +168,127 @@ function M.send(lines)
     source = text,
   })
   vim.fn.chansend(handle, payload .. "\n")
+end
+```
+
+### 5.4 ファイル全体のeval（include展開 + ソースマップ）
+
+ファイル全体をevalする。`include "path.cvg"` を再帰的に展開し、展開済みテキストをエンジンに送信する。エンジンからのエラー行番号はソースマップで元ファイル:行番号に逆変換して表示する。
+
+#### コマンド
+
+| コマンド | 動作 |
+|----------|------|
+| `:LcvgcEvalFile` | 現在のバッファ全体をeval（include展開付き） |
+
+キーマップ: `<C-S-e>` (ノーマルモード)
+
+#### include展開の仕組み
+
+1. バッファ全テキストを取得
+2. 各行を走査し、`include "path.cvg"` にマッチする行を検出
+3. パスは現在のファイルからの相対パスとして解決
+4. 対象ファイルを読み込み、再帰的に同じ展開処理を適用
+5. 展開時にソースマップ（展開後の行番号 → 元ファイルパス:元行番号）を構築
+
+#### 重複include検出
+
+展開中に訪問済みファイルのセットを保持し、同じファイルが再度includeされた場合は2回目以降を無視する（スキップする）。エンジン側も同じ挙動である。
+
+```lua
+-- 重複includeはスキップ（エンジンと同じ挙動）
+if visited[abs_path] then
+  -- 2回目以降は無視して次の行へ
+  goto continue
+end
+```
+
+#### ソースマップ
+
+展開後のテキストの各行が、どのファイルの何行目に対応するかを記録する。
+
+```lua
+-- ソースマップのデータ構造
+-- source_map[expanded_line_number] = { file = "path/to/file.cvg", line = original_line_number }
+```
+
+エンジンからエラー応答を受けた際、エラー行番号をソースマップで逆引きし、元のファイル名と行番号を含めて表示する。
+
+```
+ERR drums.cvg:5: unexpected token 'xyz'
+```
+
+#### 実装イメージ
+
+```lua
+function M.eval_file()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local filepath = vim.api.nvim_buf_get_name(bufnr)
+  local dir = vim.fn.fnamemodify(filepath, ':h')
+
+  local expanded, source_map = M.expand_includes(lines, filepath, dir, {})
+  if not expanded then return end
+
+  local text = table.concat(expanded, '\n')
+  connection.send({
+    type = 'eval',
+    source = text,
+  })
+
+  -- source_mapを保持しておき、エラー応答時に逆引きに使う
+  M._last_source_map = source_map
+end
+
+function M.expand_includes(lines, filepath, base_dir, visited)
+  local abs_path = vim.fn.fnamemodify(filepath, ':p')
+  if visited[abs_path] then
+    -- 重複includeはスキップ（エンジンと同じ挙動）
+    return {}, {}
+  end
+  visited[abs_path] = true
+
+  local expanded = {}
+  local source_map = {}
+
+  for i, line in ipairs(lines) do
+    local include_path = line:match('^%s*include%s+"([^"]+)"')
+    if include_path then
+      local full_path = base_dir .. '/' .. include_path
+      local inc_lines = M.read_file(full_path)
+      if inc_lines then
+        local inc_dir = vim.fn.fnamemodify(full_path, ':h')
+        local inc_expanded, inc_map = M.expand_includes(inc_lines, full_path, inc_dir, visited)
+        if inc_expanded then
+          for j, el in ipairs(inc_expanded) do
+            table.insert(expanded, el)
+            table.insert(source_map, inc_map[j])
+          end
+        end
+      else
+        vim.notify('lcvgc: include not found: ' .. full_path, vim.log.levels.ERROR)
+        return nil, nil
+      end
+    else
+      table.insert(expanded, line)
+      table.insert(source_map, { file = filepath, line = i })
+    end
+  end
+
+  return expanded, source_map
+end
+```
+
+#### エラー表示のソースマップ逆引き
+
+```lua
+-- display.lua の on_message 内でソースマップを参照
+if is_error and eval._last_source_map then
+  local entry = eval._last_source_map[msg.line]
+  if entry then
+    -- 元ファイル名と行番号で表示
+    table.insert(lines, 'ERR ' .. vim.fn.fnamemodify(entry.file, ':t') .. ':' .. entry.line .. ': ' .. (msg.message or ''))
+  end
 end
 ```
 
@@ -274,6 +396,7 @@ vim.filetype.add({
 | `:LcvgcConnect [port]` | エンジンに接続 (デフォルト: 9876) |
 | `:LcvgcDisconnect` | 接続を切断 |
 | `:LcvgcStatus` | エンジンの状態を表示（接続状況、再生中のscene等） |
+| `:LcvgcEvalFile` | 現在バッファ全体をeval（include展開 + ソースマップ付き） |
 | `:LcvgcStop` | 全停止（`stop` をevalするショートカット） |
 | `:LcvgcLayout` | 3ペインレイアウトを構築 |
 | `:LcvgcMicStart [options]` | マイク入力開始。検出した音名をカーソル位置に挿入。オプション: `--quantize N`, `--key c`, `--scale minor` 等 |
