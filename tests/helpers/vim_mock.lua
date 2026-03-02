@@ -78,6 +78,8 @@ vim_mock.api = {
   nvim_get_current_buf = function() return 1 end,
   nvim_set_option_value = function() end,
   nvim_create_user_command = function() end,
+  nvim_create_autocmd = function() end,
+  nvim_create_augroup = function() return 1 end,
   nvim_put = function() end,
 }
 

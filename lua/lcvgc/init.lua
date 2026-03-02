@@ -21,6 +21,17 @@ function M.setup(opts)
     connection.connect(opts.port, display.on_message)
   end
 
+  -- 新規 .cvg ファイル作成時にサンプルテンプレートを自動挿入
+  vim.api.nvim_create_autocmd('BufNewFile', {
+    pattern = '*.cvg',
+    group = vim.api.nvim_create_augroup('lcvgc_template', { clear = true }),
+    callback = function(ev)
+      local lines = require('lcvgc.template').get_lines()
+      vim.api.nvim_buf_set_lines(ev.buf, 0, -1, false, lines)
+      vim.bo[ev.buf].modified = false
+    end,
+  })
+
   if opts.auto_layout then
     vim.api.nvim_create_autocmd('BufRead', {
       pattern = '*.cvg',
