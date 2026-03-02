@@ -193,6 +193,14 @@ luaenv rehash
 busted
 ```
 
+## 関連プロジェクト
+
+lcvgc.nvim は以下のプロジェクトと連携して動作します:
+
+- [lcvgc](https://github.com/vikke/lcvgc) — ライブコーディングエンジン本体。MIDI シーケンスの評価・再生を行うバックエンド（別途インストールが必要）
+- [lcvgc_mic](https://github.com/vikke/lcvgc_mic) — マイク入力からリアルタイムにピッチを検出し、lcvgc DSL形式のノートテキストを生成するCLIツール
+- [tree-sitter-cvg](https://github.com/vikke/tree-sitter-cvg) — lcvgc DSL（.cvgファイル）用の Tree-sitter 文法。`:TSInstall cvg` でインストールされるパーサーのソース
+
 ### トラブルシューティング
 
 #### `gzip: stdin: not in gzip format` (LuaJIT ビルド時)
