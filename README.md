@@ -187,6 +187,14 @@ luaenv rehash
 busted
 ```
 
+## Related Projects
+
+lcvgc.nvim works in conjunction with the following projects:
+
+- [lcvgc](https://github.com/vikke/lcvgc) — The live coding engine itself. A backend that evaluates and plays back MIDI sequences (must be installed separately)
+- [lcvgc_mic](https://github.com/vikke/lcvgc_mic) — A CLI tool that detects pitch in real time from microphone input and generates note text in lcvgc DSL format
+- [tree-sitter-cvg](https://github.com/vikke/tree-sitter-cvg) — A Tree-sitter grammar for the lcvgc DSL (.cvg files). The source for the parser installed via `:TSInstall cvg`
+
 ### Troubleshooting
 
 #### `gzip: stdin: not in gzip format` (During LuaJIT Build)
