@@ -17,6 +17,13 @@ function M.setup()
     },
     filetype = { 'cvg' },
   }
+
+  -- 遅延読み込み時、既に開かれているcvgバッファのtreesitterハイライトを有効化
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].filetype == 'cvg' then
+      pcall(vim.treesitter.start, buf, 'cvg')
+    end
+  end
 end
 
 return M
