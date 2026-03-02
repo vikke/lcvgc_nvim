@@ -7,7 +7,7 @@ function M.setup()
     callback = function()
       vim.lsp.start({
         name = 'lcvgc-lsp',
-        cmd = { 'lcvgc', 'lsp' },
+        cmd = { 'lcvgc-lsp' },
         root_dir = vim.fn.getcwd(),
       })
     end,
