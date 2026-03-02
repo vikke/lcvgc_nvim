@@ -18,12 +18,27 @@ function M.setup()
     filetype = { 'cvg' },
   }
 
-  -- 遅延読み込み時、既に開かれているcvgバッファのtreesitterハイライトを有効化
+  -- cvgバッファのtreesitterハイライトを有効化
+  -- nvim-treesitterの遅延読み込みでhighlight moduleが自動アタッチしないため手動で起動
+  local function enable_highlight(buf)
+    pcall(vim.treesitter.start, buf, 'cvg')
+  end
+
+  -- 既に開かれているcvgバッファ
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].filetype == 'cvg' then
-      pcall(vim.treesitter.start, buf, 'cvg')
+      enable_highlight(buf)
     end
   end
+
+  -- 今後開かれるcvgバッファ
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'cvg',
+    group = vim.api.nvim_create_augroup('lcvgc_treesitter_highlight', { clear = true }),
+    callback = function(ev)
+      enable_highlight(ev.buf)
+    end,
+  })
 end
 
 return M
