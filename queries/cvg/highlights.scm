@@ -39,14 +39,11 @@
 ;; ステップシーケンサーパターン (x.oX|)
 (step_pattern) @string
 
-;; 確率行 (..5...7.)
-(probability_row) @number.special
-
 ;; scene内の確率
 (scene_slot (probability) @number.special)
 
 ;; scene内のシャッフル |
-(scene_slot "|" @operator)
+(shuffle_expr "|" @operator)
 
 ;; 重み (*3)
 (weight) @number.weight

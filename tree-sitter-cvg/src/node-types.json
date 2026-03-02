@@ -549,6 +549,21 @@
     }
   },
   {
+    "type": "rest",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "duration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "scale_attr",
     "named": true,
     "fields": {},
@@ -1078,6 +1093,10 @@
     "named": true
   },
   {
+    "type": "r",
+    "named": false
+  },
+  {
     "type": "random",
     "named": false
   },
@@ -1088,10 +1107,6 @@
   {
     "type": "resolution",
     "named": false
-  },
-  {
-    "type": "rest",
-    "named": true
   },
   {
     "type": "scale",

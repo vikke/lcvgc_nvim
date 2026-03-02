@@ -165,7 +165,7 @@ module.exports = grammar({
       optional($.articulation),
     ),
 
-    rest: $ => 'r',
+    rest: $ => seq('r', optional(seq(':', $.duration))),
 
     octave: $ => /[0-9]/,
 
