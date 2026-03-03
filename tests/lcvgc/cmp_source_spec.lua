@@ -137,7 +137,7 @@ describe("lcvgc.cmp_source", function()
       assert.is_not_nil(callback_result.items)
       assert.equals(1, #callback_result.items)  -- out ポートのみ
       assert.equals("IAC Driver Bus 1", callback_result.items[1].label)
-      assert.equals('IAC Driver Bus 1"', callback_result.items[1].insertText)
+      assert.equals('IAC Driver Bus 1', callback_result.items[1].insertText)
       assert.equals("[MIDI Port]", callback_result.items[1].detail)
       assert.is_false(callback_result.isIncomplete)
     end)

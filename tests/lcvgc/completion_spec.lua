@@ -106,7 +106,7 @@ describe("lcvgc.completion", function()
       completion.trigger_port_completion()
       assert.is_not_nil(complete_args)
       assert.equals(1, #complete_args.items)
-      assert.equals('IAC Driver Bus 1"', complete_args.items[1].word)
+      assert.equals('IAC Driver Bus 1', complete_args.items[1].word)
       assert.equals("IAC Driver Bus 1", complete_args.items[1].abbr)
 
       -- リストア

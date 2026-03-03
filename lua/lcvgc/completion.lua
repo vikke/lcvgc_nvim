@@ -32,10 +32,11 @@ function M.trigger_port_completion()
     return
   end
 
+  -- 閉じ引用符は自動ペアリングに委ねる
   local items = {}
   for _, name in ipairs(names) do
     table.insert(items, {
-      word = name .. '"',
+      word = name,
       abbr = name,
       menu = '[MIDI Port]',
     })

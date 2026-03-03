@@ -61,13 +61,13 @@ function source:complete(params, callback)
     return
   end
 
-  -- LSP 準拠の補完アイテムを構築
+  -- LSP 準拠の補完アイテムを構築（閉じ引用符は自動ペアリングに委ねる）
   local items = {}
   for _, name in ipairs(names) do
     table.insert(items, {
       label = name,
       kind = COMPLETION_KIND_VALUE,
-      insertText = name .. '"',
+      insertText = name,
       detail = '[MIDI Port]',
     })
   end
