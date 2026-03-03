@@ -44,9 +44,18 @@
     - 英語ドキュメント: *.md
 - 翻訳は、日本語400行程度に対して、1 sub agentを起動して並列実行で処理を行なう事。1 sub agent 1 section を担当させ、`git worktree` を上手く使って作業分担する事。
 
+## テスト実行
+
+- busted は luaenv 経由でインストールされている。実行時は PATH を通す事。
+  ```bash
+  export PATH="$HOME/.luaenv/shims:$HOME/.luaenv/bin:$PATH"
+  busted
+  ```
+- 詳細な環境構築手順は `README.ja.md` の「テスト環境構築」セクションを参照。
+
 ## **厳守**: 再発防止注意事項
 
 - 失敗をした場合には、このセクションにどうしたら繰替えさないかを追記していくこと。
 - コミット前にビルド・リント（Rust: `cargo build --release`、Lua: `luacheck`等）で警告ゼロを確認する事。警告が残っている状態でコミットしない事。
-- コミット前にテスト（Rust: `cargo test`、Lua: plenary test等）で全テストパスを確認する事。
+- コミット前にテスト（Rust: `cargo test`、Lua: `busted`）で全テストパスを確認する事。busted 実行時は luaenv の PATH を通す事。
 - モジュール構成を変更したら、関連ファイルとの整合性を必ず確認する事。
