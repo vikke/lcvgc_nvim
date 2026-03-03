@@ -21,6 +21,7 @@ An engine and Vim plugin for live coding. A live coding toolkit designed for mod
   opts = {
     port = 9876,
     log_path = '/tmp/lcvgc.log',
+    debounce = 150,  -- Delay before showing completions (ms). Default: 150
   },
 }
 ```

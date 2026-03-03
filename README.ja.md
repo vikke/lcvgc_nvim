@@ -22,6 +22,7 @@ midi to cv を使っての moduler synth を想定した live coding tool kit.
   opts = {
     port = 9876,
     log_path = '/tmp/lcvgc.log',
+    debounce = 150,  -- 補完表示までの遅延（ms）。デフォルト 150
   },
 }
 ```
