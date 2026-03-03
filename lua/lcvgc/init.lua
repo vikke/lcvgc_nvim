@@ -20,6 +20,7 @@ function M.setup(opts)
   require('lcvgc.lsp').setup()
 
   require('lcvgc.completion').setup()
+  require('lcvgc.cmp_source').setup()
 
   if opts.auto_connect then
     local connection = require('lcvgc.connection')

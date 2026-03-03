@@ -88,12 +88,24 @@ vim_mock.api = {
   nvim_buf_is_loaded = function() return false end,
 }
 
--- vim.bo (buffer options proxy)
+-- vim.bo (buffer options proxy with read/write support)
+-- グローバルな buffer option データストア
+vim_mock._bo_data = {}
 vim_mock.bo = setmetatable({}, {
-  __index = function()
-    return setmetatable({}, {
-      __newindex = function() end,
-    })
+  -- vim.bo.filetype のような直接アクセス（カレントバッファ）
+  __index = function(_, k)
+    if type(k) == 'number' then
+      -- vim.bo[bufnr] のようなバッファ指定アクセス
+      return setmetatable({}, {
+        __index = function(_, opt) return vim_mock._bo_data[opt] end,
+        __newindex = function(_, opt, v) vim_mock._bo_data[opt] = v end,
+      })
+    end
+    return vim_mock._bo_data[k]
+  end,
+  -- vim.bo.filetype = 'cvg' のような直接設定
+  __newindex = function(_, k, v)
+    vim_mock._bo_data[k] = v
   end,
 })
 

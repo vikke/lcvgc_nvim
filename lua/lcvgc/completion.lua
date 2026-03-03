@@ -44,7 +44,15 @@ function M.trigger_port_completion()
   vim.fn.complete(start + 1, items)
 end
 
+--- 補完セットアップ
+--- nvim-cmp がある場合は cmp_source.lua に委譲し、TextChangedI autocmd を登録しない
 function M.setup()
+  local has_cmp = pcall(require, 'cmp')
+  if has_cmp then
+    return
+  end
+
+  -- cmp 未インストール時のフォールバック: TextChangedI による直接補完
   vim.api.nvim_create_autocmd('TextChangedI', {
     pattern = '*.cvg',
     group = vim.api.nvim_create_augroup('lcvgc_port_completion', { clear = true }),
