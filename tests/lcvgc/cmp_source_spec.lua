@@ -15,6 +15,13 @@ describe("lcvgc.cmp_source", function()
           table.insert(cmp_mock.filetype_calls, { ft = ft, opts = opts })
         end,
       },
+      PreselectMode = { None = 'none', Item = 'item' },
+      mapping = {
+        preset = {
+          insert = function(overrides) return overrides end,
+        },
+        confirm = function(opts) return { confirm = true, select = opts.select } end,
+      },
     }
     package.loaded["cmp"] = cmp_mock
   end
@@ -233,6 +240,24 @@ describe("lcvgc.cmp_source", function()
       assert.equals(1, #cmp_mock.filetype_calls)
       assert.equals("cvg", cmp_mock.filetype_calls[1].ft)
       assert.equals(200, cmp_mock.filetype_calls[1].opts.performance.debounce)
+    end)
+
+    it("preselect = None が設定される", function()
+      cmp_mock.filetype_calls = {}
+
+      cmp_source.setup()
+
+      assert.equals("none", cmp_mock.filetype_calls[1].opts.preselect)
+    end)
+
+    it("CR マッピングが select = false で設定される", function()
+      cmp_mock.filetype_calls = {}
+
+      cmp_source.setup()
+
+      local cr_mapping = cmp_mock.filetype_calls[1].opts.mapping['<CR>']
+      assert.is_not_nil(cr_mapping)
+      assert.is_false(cr_mapping.select)
     end)
 
     it("opts 未指定時はデフォルト 150ms", function()

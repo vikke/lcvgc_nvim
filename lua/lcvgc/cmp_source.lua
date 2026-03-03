@@ -82,6 +82,9 @@ end
 --- nvim-cmp にソースを登録する
 --- cmp が未インストールの場合は何もしない
 --- @param opts table|nil プラグイン設定（opts.debounce で補完遅延を指定）
+--- nvim-cmp にソースを登録する
+--- CVG ファイルでは preselect を無効化し、Enter は明示選択時のみ確定する
+--- @param opts table|nil プラグイン設定（opts.debounce で補完遅延を指定）
 function M.setup(opts)
   local ok, cmp = pcall(require, 'cmp')
   if not ok then
@@ -92,6 +95,10 @@ function M.setup(opts)
 
   cmp.register_source('lcvgc', source.new())
   cmp.setup.filetype('cvg', {
+    preselect = cmp.PreselectMode.None,
+    mapping = cmp.mapping.preset.insert({
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),
+    }),
     performance = {
       debounce = debounce,
     },
