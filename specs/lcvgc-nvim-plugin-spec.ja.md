@@ -593,6 +593,27 @@ bars_count = "Number of bars"
 ...
 ```
 
+### nvim-cmp 統合
+
+nvim-cmp がインストールされている環境では、プラグインは自動的に nvim-cmp のカスタムソースとして補完を統合する。
+
+#### 補完ソース
+
+| ソース名 | 提供元 | 内容 |
+|---------|--------|------|
+| `nvim_lsp` | LSP サーバー | 文脈に応じたキーワード・識別子補完 |
+| `lcvgc` | カスタムソース | エンジン経由の MIDI ポート名補完 |
+
+#### 補完確定の挙動
+
+CVG ファイルでは補完候補の誤確定を防ぐため、以下の `cmp.setup.filetype` 設定を適用する:
+
+- `preselect = cmp.PreselectMode.None` — 補完候補を自動選択しない
+- `<CR>` は `cmp.mapping.confirm({ select = false })` — 明示的に `C-n` / `C-p` で候補を選択した場合のみ Enter で確定する。未選択時の Enter は通常の改行として動作する
+- `performance.debounce` — 補完表示までの遅延（デフォルト 150ms、`opts.debounce` で設定可能）
+
+nvim-cmp が未インストールの環境では `TextChangedI` autocmd + `vim.fn.complete()` によるフォールバック補完が動作する。
+
 ### 補完・ヒントの文脈依存テーブル
 
 以下の表で「補完」は選択肢として表示されるもの、「ヒント」はインレイヒントとしてグレーで表示される説明。

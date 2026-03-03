@@ -97,6 +97,29 @@ git clone https://github.com/vikke/lcvgc.nvim \
   ~/.local/share/nvim/site/pack/plugins/start/lcvgc.nvim
 ```
 
+## 補完の動作
+
+[nvim-cmp](https://github.com/hrsh7th/nvim-cmp) がインストールされている環境では、自動的に nvim-cmp のカスタムソースとして補完が統合されます。
+
+- **LSP キーワード補完**: `nvim_lsp` ソース経由で LSP サーバーが文脈に応じたキーワードを提供
+- **MIDI ポート名補完**: `lcvgc` カスタムソース経由でエンジンから取得したポート名を提供
+
+### 補完の確定操作
+
+CVG ファイルでは、補完候補の誤確定を防ぐため以下の挙動になります:
+
+- 補完メニューが表示されても、候補は**自動選択されない**（`preselect = None`）
+- `Enter` キーは **`C-n` / `C-p` で明示的に候補を選択した場合のみ**確定する
+- 候補を選択していない状態で `Enter` を押すと、通常の改行が挿入される
+
+nvim-cmp が未インストールの環境では、`vim.fn.complete()` によるフォールバック補完が動作します。
+
+### 設定オプション
+
+| オプション | デフォルト | 説明 |
+|-----------|-----------|------|
+| `debounce` | `150` | 補完表示までの遅延（ミリ秒） |
+
 ## テスト環境構築
 
 テストフレームワークに [busted](https://github.com/lunarmodules/busted) を使用しています。

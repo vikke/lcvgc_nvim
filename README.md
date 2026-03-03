@@ -96,6 +96,29 @@ git clone https://github.com/vikke/lcvgc.nvim \
   ~/.local/share/nvim/site/pack/plugins/start/lcvgc.nvim
 ```
 
+## Completion Behavior
+
+When [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) is installed, completions are automatically integrated as nvim-cmp custom sources.
+
+- **LSP keyword completion**: Provided via the `nvim_lsp` source from the LSP server based on context
+- **MIDI port name completion**: Provided via the `lcvgc` custom source with port names fetched from the engine
+
+### Confirmation Behavior
+
+In CVG files, the following behavior is applied to prevent accidental completion confirmation:
+
+- Completion candidates are **not auto-selected** (`preselect = None`)
+- `Enter` only confirms a candidate **when explicitly selected via `C-n` / `C-p`**
+- Pressing `Enter` without selecting a candidate inserts a normal newline
+
+When nvim-cmp is not installed, fallback completion via `vim.fn.complete()` is used.
+
+### Configuration Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `debounce` | `150` | Delay before showing completions (milliseconds) |
+
 ## Setting Up the Test Environment
 
 We use [busted](https://github.com/lunarmodules/busted) as our testing framework. Follow the steps below to set up the environment to run on LuaJIT.

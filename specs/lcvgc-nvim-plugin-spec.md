@@ -593,6 +593,27 @@ bars_count = "Number of bars"
 ...
 ```
 
+### nvim-cmp Integration
+
+When nvim-cmp is installed, the plugin automatically integrates completions as nvim-cmp custom sources.
+
+#### Completion Sources
+
+| Source Name | Provider | Content |
+|------------|----------|---------|
+| `nvim_lsp` | LSP server | Context-aware keyword and identifier completion |
+| `lcvgc` | Custom source | MIDI port name completion via the engine |
+
+#### Confirmation Behavior
+
+The following `cmp.setup.filetype` settings are applied for CVG files to prevent accidental completion confirmation:
+
+- `preselect = cmp.PreselectMode.None` — Completion candidates are not auto-selected
+- `<CR>` uses `cmp.mapping.confirm({ select = false })` — Enter only confirms a candidate when explicitly selected via `C-n` / `C-p`. Pressing Enter without selecting a candidate inserts a normal newline
+- `performance.debounce` — Delay before showing completions (default 150ms, configurable via `opts.debounce`)
+
+When nvim-cmp is not installed, fallback completion via `TextChangedI` autocmd + `vim.fn.complete()` is used.
+
 ### Context-Dependent Completion and Hint Table
 
 In the tables below, "Completion" refers to items displayed as selectable candidates, and "Hint" refers to descriptions displayed in gray as inlay hints.
