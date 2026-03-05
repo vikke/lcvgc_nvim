@@ -25,6 +25,8 @@ vim_mock.fn = {
   chansend = function() end,
   jobstart = function() return 1 end,
   jobstop = function() end,
+  timer_start = function(_, cb) if cb then cb() end return 1 end,
+  timer_stop = function() end,
   fnamemodify = function(path, mods)
     if mods == ':p' then
       -- 簡易的な絶対パス変換（テスト用）
@@ -122,7 +124,22 @@ vim_mock.cmd = function() end
 vim_mock.keymap = { set = function() end }
 
 -- vim.lsp
-vim_mock.lsp = {}
+vim_mock.lsp = {
+  util = {
+    open_floating_preview = function() end,
+  },
+}
+
+-- vim.diagnostic
+vim_mock.diagnostic = {
+  severity = { ERROR = 1, WARN = 2, INFO = 3, HINT = 4 },
+  set = function() end,
+}
+
+-- vim.ui
+vim_mock.ui = {
+  select = function() end,
+}
 
 -- vim.treesitter
 vim_mock.treesitter = { start = function() end }

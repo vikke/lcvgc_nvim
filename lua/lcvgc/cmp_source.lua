@@ -94,6 +94,10 @@ function M.setup(opts)
   local debounce = (opts and opts.debounce) or 150
 
   cmp.register_source('lcvgc', source.new())
+
+  -- デーモン経由LSP補完ソースを登録
+  local lsp_completion = require('lcvgc.lsp.completion')
+  cmp.register_source('lcvgc_lsp', lsp_completion.new())
   cmp.setup.filetype('cvg', {
     preselect = cmp.PreselectMode.None,
     mapping = cmp.mapping.preset.insert({
@@ -104,7 +108,7 @@ function M.setup(opts)
     },
     sources = {
       { name = 'lcvgc' },
-      { name = 'nvim_lsp' },
+      { name = 'lcvgc_lsp' },
     },
   })
 end

@@ -234,8 +234,9 @@ describe("lcvgc.cmp_source", function()
 
       cmp_source.setup({ debounce = 200 })
 
-      assert.equals(1, #cmp_mock.register_source_calls)
+      assert.equals(2, #cmp_mock.register_source_calls)
       assert.equals("lcvgc", cmp_mock.register_source_calls[1].name)
+      assert.equals("lcvgc_lsp", cmp_mock.register_source_calls[2].name)
 
       assert.equals(1, #cmp_mock.filetype_calls)
       assert.equals("cvg", cmp_mock.filetype_calls[1].ft)

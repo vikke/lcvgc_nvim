@@ -1,7 +1,7 @@
 local M = {}
 
 --- プラグインバージョン
-M.version = '0.4.0'
+M.version = '0.5.0'
 
 local defaults = {
   port = 9876,
@@ -19,7 +19,7 @@ function M.setup(opts)
   require('lcvgc.treesitter').setup()
   require('lcvgc.colors').setup()
   require('lcvgc.commands').setup(opts)
-  require('lcvgc.lsp').setup()
+  require('lcvgc.lsp').setup(opts)
 
   require('lcvgc.completion').setup()
   require('lcvgc.cmp_source').setup(opts)
