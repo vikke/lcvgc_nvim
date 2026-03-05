@@ -19,7 +19,7 @@ function M.setup(opts)
   require('lcvgc.treesitter').setup()
   require('lcvgc.colors').setup()
   require('lcvgc.commands').setup(opts)
-  require('lcvgc.lsp').setup()
+  require('lcvgc.lsp').setup(opts)
 
   require('lcvgc.completion').setup()
   require('lcvgc.cmp_source').setup(opts)
