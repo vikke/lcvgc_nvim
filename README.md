@@ -19,7 +19,7 @@ An engine and Vim plugin for live coding. A live coding toolkit designed for mod
   'vikke/lcvgc.nvim',
   event = { 'BufReadPre *.cvg', 'BufNewFile *.cvg' },
   opts = {
-    port = 9876,
+    port = 5555,
     log_path = '/tmp/lcvgc.log',
     debounce = 150,  -- Delay before showing completions (ms). Default: 150
   },

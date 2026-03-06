@@ -76,7 +76,7 @@ describe("lcvgc.ports", function()
       local connection = reload_module("lcvgc.connection")
       local sent = {}
       vim.fn.sockconnect = function() return 42 end
-      connection.connect(9876, function() end)
+      connection.connect(5555, function() end)
 
       -- request をモニター
       local orig_request = connection.request

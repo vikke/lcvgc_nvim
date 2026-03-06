@@ -34,7 +34,7 @@ The lcvgc engine runs independently as a daemon. The Neovim plugin connects to t
 TCP socket connection via `vim.fn.sockconnect`. Asynchronous communication ensures Neovim does not block.
 
 ```lua
-local handle = vim.fn.sockconnect('tcp', 'localhost:9876', {
+local handle = vim.fn.sockconnect('tcp', 'localhost:5555', {
   on_data = function(_, data, _)
     -- エンジンからの応答を処理
   end,
@@ -336,7 +336,7 @@ end
 
 ```lua
 function M.connect(port)
-  port = port or 9876
+  port = port or 5555
   M.handle = vim.fn.sockconnect('tcp', 'localhost:' .. port, {
     on_data = function(_, data, _)
       M.on_response(data)
@@ -368,7 +368,7 @@ Provides a command to reconnect after restarting Neovim or the engine.
 
 ```lua
 vim.api.nvim_create_user_command('LcvgcConnect', function(opts)
-  local port = tonumber(opts.args) or 9876
+  local port = tonumber(opts.args) or 5555
   M.connect(port)
 end, { nargs = '?' })
 ```
@@ -393,7 +393,7 @@ vim.filetype.add({
 
 | Command | Action |
 |---------|--------|
-| `:LcvgcConnect [port]` | Connect to the engine (default: 9876) |
+| `:LcvgcConnect [port]` | Connect to the engine (default: 5555) |
 | `:LcvgcDisconnect` | Disconnect from the engine |
 | `:LcvgcStatus` | Display engine status (connection state, currently playing scene, etc.) |
 | `:LcvgcEvalFile` | Evaluate entire current buffer (with include expansion + source map) |
@@ -486,7 +486,7 @@ end, {})
 
 ```bash
 # 1. エンジンを起動（バックグラウンド or 別ターミナル）
-lcvgc daemon --port 9876 --log /tmp/lcvgc.log
+lcvgc daemon --port 5555 --log /tmp/lcvgc.log
 
 # 2. Neovimを起動
 nvim song.cvg
@@ -547,8 +547,8 @@ vim.api.nvim_create_autocmd('FileType', {
 LSP completion descriptions (detail/documentation) and inlay hints support i18n. The language setting is specified via engine startup options or a configuration file.
 
 ```bash
-lcvgc daemon --port 9876 --lang ja
-lcvgc daemon --port 9876 --lang en
+lcvgc daemon --port 5555 --lang ja
+lcvgc daemon --port 5555 --lang en
 ```
 
 Rust-side implementation concept:

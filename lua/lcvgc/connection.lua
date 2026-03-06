@@ -6,7 +6,7 @@ local on_message_cb = nil
 local response_handlers = {}
 
 function M.connect(port, on_message)
-  port = port or 9876
+  port = port or 5555
   on_message_cb = on_message
 
   if handle ~= 0 then

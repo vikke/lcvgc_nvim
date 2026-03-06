@@ -34,7 +34,7 @@ function M.setup(opts)
   opts = opts or {}
 
   vim.api.nvim_create_user_command('LcvgcConnect', function(cmd)
-    local port = tonumber(cmd.args) or opts.port or 9876
+    local port = tonumber(cmd.args) or opts.port or 5555
     local ok = connection.connect(port, display.on_message)
     if ok then
       require('lcvgc.ports').fetch()

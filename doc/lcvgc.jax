@@ -58,7 +58,7 @@ lazy.nvim (推奨):~
     'vikke/lcvgc.nvim',
     event = { 'BufReadPre *.cvg', 'BufNewFile *.cvg' },
     opts = {
-      port = 9876,
+      port = 5555,
       log_path = '/tmp/lcvgc.log',
     },
   }
@@ -113,7 +113,7 @@ require('lcvgc').setup({opts})
 
   オプション:~
 
-  port           `number`  (デフォルト: 9876)
+  port           `number`  (デフォルト: 5555)
     lcvgcエンジンの接続先ポート番号。
 
   log_path       `string`  (デフォルト: "/tmp/lcvgc.log")
@@ -129,7 +129,7 @@ require('lcvgc').setup({opts})
   設定例:~
 >lua
   require('lcvgc').setup({
-    port = 9876,
+    port = 5555,
     log_path = '/tmp/lcvgc.log',
     auto_connect = true,
     auto_layout = true,
@@ -141,7 +141,7 @@ require('lcvgc').setup({opts})
 
 :LcvgcConnect [{port}]                                    *:LcvgcConnect*
   lcvgcエンジンに接続する。{port}を省略するとsetupで指定したポート
-  （デフォルト: 9876）を使用する。
+  （デフォルト: 5555）を使用する。
 
 :LcvgcDisconnect                                       *:LcvgcDisconnect*
   エンジンとの接続を切断する。

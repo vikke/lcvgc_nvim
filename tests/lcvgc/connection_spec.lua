@@ -32,7 +32,7 @@ describe("lcvgc.connection", function()
       -- _on_data は on_message_cb が nil なら何もしない
       -- まず on_message_cb をセットするため、connect のモックを調整
       vim.fn.sockconnect = function() return 42 end
-      connection.connect(9876, function(msg) table.insert(received, msg) end)
+      connection.connect(5555, function(msg) table.insert(received, msg) end)
 
       connection._on_data({ '{"type":"status","tempo":120}\n' })
       assert.equals(1, #received)
@@ -47,7 +47,7 @@ describe("lcvgc.connection", function()
       local received = {}
       vim.fn.sockconnect = function() return 42 end
       connection = reload_module("lcvgc.connection")
-      connection.connect(9876, function(msg) table.insert(received, msg) end)
+      connection.connect(5555, function(msg) table.insert(received, msg) end)
 
       connection._on_data({ '{"type":"a"}\n{"type":"b"}\n' })
       assert.equals(2, #received)
@@ -61,7 +61,7 @@ describe("lcvgc.connection", function()
       local received = {}
       vim.fn.sockconnect = function() return 42 end
       connection = reload_module("lcvgc.connection")
-      connection.connect(9876, function(msg) table.insert(received, msg) end)
+      connection.connect(5555, function(msg) table.insert(received, msg) end)
 
       connection._on_data({ '{"type":' })
       assert.equals(0, #received)
@@ -77,7 +77,7 @@ describe("lcvgc.connection", function()
       local received = {}
       vim.fn.sockconnect = function() return 42 end
       connection = reload_module("lcvgc.connection")
-      connection.connect(9876, function(msg) table.insert(received, msg) end)
+      connection.connect(5555, function(msg) table.insert(received, msg) end)
 
       connection._on_data({ '\n\n{"type":"x"}\n\n' })
       assert.equals(1, #received)
@@ -89,7 +89,7 @@ describe("lcvgc.connection", function()
       local received = {}
       vim.fn.sockconnect = function() return 42 end
       connection = reload_module("lcvgc.connection")
-      connection.connect(9876, function(msg) table.insert(received, msg) end)
+      connection.connect(5555, function(msg) table.insert(received, msg) end)
 
       connection._on_data({ 'not json\n{"type":"valid"}\n' })
       assert.equals(1, #received)
@@ -103,7 +103,7 @@ describe("lcvgc.connection", function()
     it("接続中なら切断して状態をリセットする", function()
       vim.fn.sockconnect = function() return 42 end
       connection = reload_module("lcvgc.connection")
-      connection.connect(9876, function() end)
+      connection.connect(5555, function() end)
       assert.is_true(connection.is_connected())
 
       connection.disconnect()
