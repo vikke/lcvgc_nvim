@@ -18,7 +18,8 @@ function M._handle_response(msg)
     return false
   end
 
-  if msg.lsp.location == nil then
+  -- JSON null は vim.NIL (userdata) としてデコードされるため両方チェック
+  if msg.lsp.location == nil or msg.lsp.location == vim.NIL then
     vim.notify('Definition not found', vim.log.levels.INFO)
     return true
   end

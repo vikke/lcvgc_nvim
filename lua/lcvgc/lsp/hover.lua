@@ -18,7 +18,8 @@ function M._handle_response(msg)
     return false
   end
 
-  if msg.lsp.info == nil then
+  -- JSON null は vim.NIL (userdata) としてデコードされるため両方チェック
+  if msg.lsp.info == nil or msg.lsp.info == vim.NIL then
     vim.notify('No hover information', vim.log.levels.INFO)
     return true
   end
