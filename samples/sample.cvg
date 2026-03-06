@@ -1,16 +1,27 @@
 // ============================================================
-// ハードテクノ サンプル曲 (Hard Techno Sample Track)
+// サンプル曲 (Sample Track)
 // ============================================================
-// BPM 130 の Cマイナースケールによるハードテクノ。
+// BPM 130 の Cマイナースケールによるサンプル曲。
 // Volca Drum / Volca Bass / Volca FM の3台構成。
 // ドラム・ベース・FMシンセの各クリップは別ファイルで定義し、
 // このメインファイルからincludeで読み込みます。
 //
-// A hard techno track at BPM 130 in C minor scale.
+// A sample track at BPM 130 in C minor scale.
 // Uses three devices: Volca Drum, Volca Bass, and Volca FM.
 // Drum, bass, and FM synth clips are defined in separate files
 // and included from this main file.
 // ============================================================
+
+// ------------------------------------------------------------
+// クリップ読み込み (Clip Includes)
+// ------------------------------------------------------------
+// ドラム・ベース・FMシンセのクリップをそれぞれ別ファイルから読み込み。
+// Drum, bass, and FM synth clips are loaded from separate files.
+// ------------------------------------------------------------
+
+include "./sample_drums.cvg"
+include "./sample_bass.cvg"
+include "./sample_fm.cvg"
 
 // ------------------------------------------------------------
 // デバイス定義 (Device Definitions)
@@ -87,17 +98,6 @@ instrument vfm {
 
 tempo 130
 scale c minor
-
-// ------------------------------------------------------------
-// クリップ読み込み (Clip Includes)
-// ------------------------------------------------------------
-// ドラム・ベース・FMシンセのクリップをそれぞれ別ファイルから読み込み。
-// Drum, bass, and FM synth clips are loaded from separate files.
-// ------------------------------------------------------------
-
-include "./hard_techno_drums.cvg"
-include "./hard_techno_bass.cvg"
-include "./hard_techno_fm.cvg"
 
 // ------------------------------------------------------------
 // シーン定義 (Scene Definitions)
