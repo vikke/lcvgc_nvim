@@ -1,0 +1,158 @@
+// ============================================================
+// Hard Techno Drums - Volca Drum用ドラムパターン集
+// Hard Techno Drums - Drum pattern collection for Volca Drum
+//
+// kit定義 (vdrum) はメインファイルで定義済み。
+// Kit definition (vdrum) is defined in the main file.
+//
+// 収録パターン / Included patterns:
+//   drums_main    - 4つ打ちメインビート / Four-on-the-floor main beat
+//   drums_fill    - フィルインパターン / Fill-in pattern
+//   drums_break   - ブレイク用(キックなし) / Break section (no kick)
+//   drums_buildup - ビルドアップ(スネア連打) / Buildup (snare roll)
+// ============================================================
+
+// ------------------------------------------------------------
+// drums_main: 4つ打ちメインビート
+// drums_main: Four-on-the-floor main beat
+//
+// bd: 各拍頭にキック / Kick on every beat
+// sd: 2拍目・4拍目にスネア / Snare on beats 2 and 4
+// hh: 裏拍にクローズドハイハット / Closed hi-hat on offbeats
+// oh: 小節末の裏にオープンハイハット / Open hi-hat on last offbeat
+// 3-4小節目にフィル要素 / Fill elements in bars 3-4
+// ------------------------------------------------------------
+clip drums_main [bars 4] {
+  use vdrum
+  resolution 16
+
+  // bar1: 基本パターン / basic pattern
+  bd    X...|X...|X...|X...
+  sd    ....|X...|....|X...
+  hh    ..x...x...x...x.
+  oh    ..............x.
+
+  // bar2: bar1と同じ / same as bar1
+  bd    X...|X...|X...|X...
+  sd    ....|X...|....|X...
+  hh    ..x...x...x...x.
+  oh    ..............x.
+
+  // bar3: フィル要素追加 / added fill elements
+  bd    X...|X...|X...|X...
+  sd    ....|X...|..o.|X.o.
+  hh    ..x...x...x...x.
+  oh    ..............x.
+
+  // bar4: フィル強化 / enhanced fill
+  bd    X...|X...|X.x.|X...
+  sd    ....|X...|..o.|XxoX
+  hh    ..x...x...x.....
+  oh    ..............x.
+}
+
+// ------------------------------------------------------------
+// drums_fill: フィルインパターン
+// drums_fill: Fill-in pattern
+//
+// bd: キック連打(16分音符多用) / Kick rolls (heavy 16th notes)
+// sd: スネアロール / Snare roll
+// hh: クローズドハイハット / Closed hi-hat
+// 4小節で密度が増加 / Density increases over 4 bars
+// ------------------------------------------------------------
+clip drums_fill [bars 4] {
+  use vdrum
+  resolution 16
+
+  // bar1: 疎なフィル / sparse fill
+  bd    X...|X...|X...|X...
+  sd    ....|..x.|....|..x.
+  hh    x.x.x.x.x.x.x.x.
+
+  // bar2: やや密 / slightly denser
+  bd    X..x|X...|X..x|X...
+  sd    ..x.|..x.|..x.|..x.
+  hh    x.x.x.x.x.x.x.x.
+
+  // bar3: さらに密 / even denser
+  bd    X.x.|X.x.|X.x.|X.x.
+  sd    .x.x|.x.x|.x.x|.x.x
+  hh    xxxxxxxxxxxx....
+
+  // bar4: 最大密度 / maximum density
+  bd    XxXx|XxXx|XxXx|XxXx
+  sd    xXxX|xXxX|xXxX|XXXX
+  hh    xxxxxxxxxxxxxxxx
+}
+
+// ------------------------------------------------------------
+// drums_break: ブレイク用(キックなし)
+// drums_break: Break section (no kick)
+//
+// bd: 全休符 / all rests
+// sd: まばらなスネア / sparse snare hits
+// hh: ハイハットパターン / hi-hat pattern
+// oh: オープンハイハットでアクセント / open hi-hat accents
+// ------------------------------------------------------------
+clip drums_break [bars 4] {
+  use vdrum
+  resolution 16
+
+  // bar1: 最小限 / minimal
+  bd    ................
+  sd    ....|..o.|....|....
+  hh    x...x...x...x...
+  oh    ......x.......x.
+
+  // bar2: 少しスネア追加 / slight snare addition
+  bd    ................
+  sd    ....|..o.|....|.o..
+  hh    x...x...x...x...
+  oh    ......X.......X.
+
+  // bar3: テンション増加 / increasing tension
+  bd    ................
+  sd    ..o.|..x.|..o.|..x.
+  hh    x.x.x.x.x.x.x.x.
+  oh    ....X.......X...
+
+  // bar4: ブレイク終端 / break ending
+  bd    ................
+  sd    ..o.|..x.|.xox|.xXX
+  hh    x.x.x.x.x.x.....
+  oh    ....X.......X.X.
+}
+
+// ------------------------------------------------------------
+// drums_buildup: ビルドアップ(スネア連打)
+// drums_buildup: Buildup with snare roll
+//
+// bd: 4つ打ち / four-on-the-floor
+// sd: 1小節目=4分, 2小節目=8分, 3-4小節目=16分連打
+// sd: bar1=quarter, bar2=eighth, bars3-4=16th rolls
+// hh: 16分で刻み / 16th note hi-hat
+// ------------------------------------------------------------
+clip drums_buildup [bars 4] {
+  use vdrum
+  resolution 16
+
+  // bar1: スネア4分音符 / snare quarter notes
+  bd    X...|X...|X...|X...
+  sd    x...|x...|x...|x...
+  hh    x.x.x.x.x.x.x.x.
+
+  // bar2: スネア8分音符 / snare eighth notes
+  bd    X...|X...|X...|X...
+  sd    x.x.|x.x.|x.x.|x.x.
+  hh    x.x.x.x.x.x.x.x.
+
+  // bar3: スネア16分連打 / snare 16th note roll
+  bd    X...|X...|X...|X...
+  sd    xxxx|xxxx|xxxx|xxxx
+  hh    x.x.x.x.x.x.x.x.
+
+  // bar4: スネア16分アクセント付き連打 / snare 16th roll with accents
+  bd    X...|X...|X...|X...
+  sd    xXxX|xXxX|XXXX|XXXX
+  hh    xxxxxxxxxxxxxxxx
+}
