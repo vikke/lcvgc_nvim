@@ -1,12 +1,12 @@
 local M = {}
 
 --- プラグインバージョン
-M.version = '0.5.2'
+M.version = '0.6.0'
 
 local defaults = {
   port = 5555,
   log_path = '/tmp/lcvgc.log',
-  auto_connect = false,
+  auto_connect = true,
   auto_layout = false,
   debounce = 150,
   flash_duration = 300,
