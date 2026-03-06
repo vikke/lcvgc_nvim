@@ -1,0 +1,175 @@
+// ============================================================
+// ハードテクノ サンプル曲 (Hard Techno Sample Track)
+// ============================================================
+// BPM 130 の Cマイナースケールによるハードテクノ。
+// Volca Drum / Volca Bass / Volca FM の3台構成。
+// ドラム・ベース・FMシンセの各クリップは別ファイルで定義し、
+// このメインファイルからincludeで読み込みます。
+//
+// A hard techno track at BPM 130 in C minor scale.
+// Uses three devices: Volca Drum, Volca Bass, and Volca FM.
+// Drum, bass, and FM synth clips are defined in separate files
+// and included from this main file.
+// ============================================================
+
+// ------------------------------------------------------------
+// デバイス定義 (Device Definitions)
+// ------------------------------------------------------------
+// ポート名はお使いの環境に合わせて変更してください。
+// "port" values are placeholders. Change them to match your
+// MIDI port names.
+// ------------------------------------------------------------
+
+device volca_drum {
+  port "volca drum"
+}
+
+device volca_bass {
+  port "volca bass"
+}
+
+device volca_fm {
+  port "volca fm"
+}
+
+// ------------------------------------------------------------
+// キット定義 (Kit Definition) - Volca Drum
+// ------------------------------------------------------------
+
+kit vdrum {
+  device volca_drum
+  bd { channel 10, note c2 }
+  sd { channel 10, note d2 }
+  lt { channel 10, note e2 }
+  ht { channel 10, note f2 }
+  oh { channel 10, note g2 }
+  hh { channel 10, note a2 }
+}
+
+// ------------------------------------------------------------
+// インストゥルメント定義 (Instrument Definitions)
+// ------------------------------------------------------------
+
+// Volca Bass - アシッドベースライン用
+// Volca Bass - for acid basslines
+instrument vbass {
+  device volca_bass
+  channel 1
+  gate_normal 80
+  gate_staccato 30
+  cc cutoff 44
+  cc lfo_rate 48
+  cc lfo_int 49
+  cc attack 46
+  cc decay 47
+  cc slide 5
+}
+
+// Volca FM - パッド・スタブ・リード・アルペジオ用
+// Volca FM - for pads, stabs, leads, and arpeggios
+instrument vfm {
+  device volca_fm
+  channel 2
+  gate_normal 90
+  gate_staccato 20
+  cc mod_attack 42
+  cc mod_decay 43
+  cc car_attack 44
+  cc car_decay 45
+  cc algorithm 65
+  cc lfo_rate 46
+  cc lfo_pitch 47
+}
+
+// ------------------------------------------------------------
+// テンポ・スケール (Tempo & Scale)
+// ------------------------------------------------------------
+
+tempo 130
+scale c minor
+
+// ------------------------------------------------------------
+// クリップ読み込み (Clip Includes)
+// ------------------------------------------------------------
+// ドラム・ベース・FMシンセのクリップをそれぞれ別ファイルから読み込み。
+// Drum, bass, and FM synth clips are loaded from separate files.
+// ------------------------------------------------------------
+
+include "./hard_techno_drums.cvg"
+include "./hard_techno_bass.cvg"
+include "./hard_techno_fm.cvg"
+
+// ------------------------------------------------------------
+// シーン定義 (Scene Definitions)
+// ------------------------------------------------------------
+// 6パターンのシーンで楽曲を構成します。
+// The track is composed of 6 scene patterns.
+// ------------------------------------------------------------
+
+// イントロ: 静かなドラムブレイク + サブベース + FMパッド
+// Intro: quiet drum break + sub bass + FM pad
+scene intro {
+  drums_break
+  bass_sub
+  fm_pad
+}
+
+// ビルドアップ: テンポを少し上げてテンションを高める
+// Buildup: slight tempo increase to raise tension
+scene buildup {
+  drums_buildup
+  bass_main
+  fm_stab
+  tempo +2
+}
+
+// ドロップA: メインドラム + アシッドベース + FMスタブ
+// Drop A: main drums + acid bass + FM stab
+scene drop_a {
+  drums_main
+  bass_acid
+  fm_stab
+}
+
+// ドロップB: メインドラム + メインベース + FMリード
+// Drop B: main drums + main bass + FM lead
+scene drop_b {
+  drums_main
+  bass_main
+  fm_lead
+}
+
+// ブレイクダウン: ドラムブレイク + サブベース + FMパッド
+// Breakdown: drum break + sub bass + FM pad
+scene breakdown {
+  drums_break
+  bass_sub
+  fm_pad
+}
+
+// アウトロ: メインドラム + サブベース + FMアルペジオ
+// Outro: main drums + sub bass + FM arpeggio
+scene outro {
+  drums_main
+  bass_sub
+  fm_arp
+}
+
+// ------------------------------------------------------------
+// セッション定義 (Session Definition)
+// ------------------------------------------------------------
+// 楽曲全体の構成を定義します。
+// Defines the overall arrangement of the track.
+// ------------------------------------------------------------
+
+session main {
+  intro [repeat 4]
+  buildup [repeat 2]
+  drop_a [repeat 4]
+  breakdown [repeat 2]
+  buildup [repeat 2]
+  drop_b [repeat 4]
+  breakdown [repeat 2]
+  drop_a [repeat 2]
+  outro [repeat 4]
+}

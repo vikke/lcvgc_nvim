@@ -1,0 +1,104 @@
+// ============================================================
+// Hard Techno FM Synth Patterns
+// ハードテクノ FM シンセパターン集
+//
+// Volca FM 用の4種類のFMシンセクリップ定義。
+// Key: C minor (C, D, Eb, F, G, Ab, Bb)
+//
+// Four FM synth clip definitions for Volca FM.
+// Key: C minor (C, D, Eb, F, G, Ab, Bb)
+// ============================================================
+
+// ------------------------------------------------------------
+// fm_pad: パッド（コード長音）
+// fm_pad: Pad (sustained chords)
+//
+// コード名記法による長いサステインのパッドサウンド。
+// Long sustained pad sound using chord name notation.
+// mod_attack を徐々に短くし、音色の変化を演出する。
+// Gradually shorten mod_attack to create timbral movement.
+// ------------------------------------------------------------
+clip fm_pad [bars 4] {
+  // 小節1: Cm7 全音符 / Bar 1: Cm7 whole note
+  vfm cm7:3:1
+  // 小節2: Fm7 全音符 / Bar 2: Fm7 whole note
+  vfm fm7:3:1
+  // 小節3: AbM7 全音符 / Bar 3: AbM7 whole note
+  vfm abM7:3:1
+  // 小節4: G7 2分 → Cm7 2分 / Bar 4: G7 half → Cm7 half
+  vfm g7:3:2 cm7::2
+
+  // CCオートメーション / CC automation
+  vfm.mod_attack 80@1.1-40@4.4
+  vfm.car_decay 100@1.1
+}
+
+// ------------------------------------------------------------
+// fm_stab: FMスタブ（短いヒット）
+// fm_stab: FM stab (short percussive hits)
+//
+// スタッカートによる鋭いFMスタブパターン。
+// Sharp FM stab pattern using staccato articulation.
+// 短いディケイで金属的なヒットを生み出す。
+// Short decay creates metallic percussive hits.
+// ------------------------------------------------------------
+clip fm_stab [bars 4] {
+  // 小節1 / Bar 1
+  vfm cm7:3:8' r:8 cm7:3:8' r:8 cm7:3:8' r:8 r:4
+  // 小節2 / Bar 2
+  vfm fm7:3:8' r:8 r:4 fm7:3:8' r:8 fm7:3:8' r:8
+  // 小節3 / Bar 3
+  vfm abM7:3:8' r:8 abM7:3:8' r:8 r:4 abM7:3:8' r:8
+  // 小節4 / Bar 4
+  vfm g7:3:8' r:8 g7:3:8' cm7:3:8' r:8 cm7:3:8' r:4
+
+  // CCオートメーション / CC automation
+  vfm.mod_decay 20@1.1
+}
+
+// ------------------------------------------------------------
+// fm_lead: リードメロディ
+// fm_lead: Lead melody
+//
+// C minor スケールによるメロディアスなリードライン。
+// 8分音符と16分音符を組み合わせたフレーズ。
+// Melodic lead line in C minor scale.
+// Phrase combining 8th and 16th notes.
+// ------------------------------------------------------------
+clip fm_lead [bars 4] {
+  // 小節1: 上昇フレーズ / Bar 1: Ascending phrase
+  vfm c:5:8 eb g:5:16 ab g:16 f:5:8 eb c:5:4
+  // 小節2: 下降フレーズ / Bar 2: Descending phrase
+  vfm bb:5:8 ab g:5:16 f eb:16 d:5:8 c:5:4
+  // 小節3: 跳躍を含むフレーズ / Bar 3: Phrase with leaps
+  vfm g:4:8 c:5:16 eb:16 g:5:8 f eb:5:16 d:16 c:5:8 r:8
+  // 小節4: クライマックス / Bar 4: Climax
+  vfm ab:5:16 g f eb:16 d:5:8 c:5:8 g:4:4 c:5:4
+
+  // CCオートメーション / CC automation
+  vfm.lfo_rate 60@1.1
+  vfm.lfo_pitch 40@1.1-80@4.4
+}
+
+// ------------------------------------------------------------
+// fm_arp: アルペジオフレーズ
+// fm_arp: Arpeggio phrase
+//
+// コード＋arp() による16分音符アルペジオ。
+// 金属的なFMサウンドに映えるパターン。
+// 16th note arpeggio using chord + arp().
+// Pattern that suits metallic FM sound character.
+// ------------------------------------------------------------
+clip fm_arp [bars 4] {
+  // 小節1: Cm7 上昇アルペジオ / Bar 1: Cm7 ascending arpeggio
+  vfm cm7:4:1 arp(up, 16)
+  // 小節2: Fm7 上下アルペジオ / Bar 2: Fm7 up-down arpeggio
+  vfm fm7:4:1 arp(updown, 16)
+  // 小節3: AbM7 上昇アルペジオ / Bar 3: AbM7 ascending arpeggio
+  vfm abM7:4:1 arp(up, 16)
+  // 小節4: G7 下降アルペジオ / Bar 4: G7 descending arpeggio
+  vfm g7:4:1 arp(down, 16)
+
+  // CCオートメーション / CC automation
+  vfm.algorithm 80@1.1-40@2.4 80@3.1-40@4.4
+}
