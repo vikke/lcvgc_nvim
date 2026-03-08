@@ -75,13 +75,67 @@ function source:complete(params, callback)
   callback({ items = items, isIncomplete = false })
 end
 
---- nvim-cmp にソースを登録する
---- cmp が未インストールの場合は何もしない
---- nvim-cmp にソースを登録する
---- cmp が未インストールの場合は何もしない
---- nvim-cmp にソースを登録する
---- cmp が未インストールの場合は何もしない
---- @param opts table|nil プラグイン設定（opts.debounce で補完遅延を指定）
+--- include パス補完用 nvim-cmp ソース
+--- cvgファイルのディレクトリを基準にファイルパス候補を返す
+local include_source = {}
+include_source.__index = include_source
+
+--- include ソースインスタンスを生成する
+--- @return table source インスタンス
+function include_source.new()
+  return setmetatable({}, include_source)
+end
+
+--- CVG ファイルでのみ補完を有効にする
+--- @return boolean
+function include_source:is_available()
+  return vim.bo.filetype == 'cvg'
+end
+
+--- デバッグ用のソース名を返す
+--- @return string
+function include_source:get_debug_name()
+  return 'lcvgc_include'
+end
+
+--- 補完トリガー文字を返す
+--- @return string[]
+function include_source:get_trigger_characters()
+  return { ' ', '/' }
+end
+
+--- ファイルパス文字にマッチするキーワードパターン
+--- Keyword pattern matching filename characters
+--- @return string vim regex pattern
+function include_source:get_keyword_pattern()
+  return [[\f\+]]
+end
+
+--- include パス補完候補を返す
+--- @param params table nvim-cmp の補完パラメータ
+--- @param callback function 補完結果を返すコールバック
+function include_source:complete(params, callback)
+  local completion = require('lcvgc.completion')
+  local line = params.context.cursor_before_line
+
+  if not completion.is_include_context(line) then
+    return
+  end
+
+  local buf_name = vim.api.nvim_buf_get_name(params.context.bufnr)
+  if buf_name == '' then
+    return
+  end
+
+  local base_dir = vim.fn.fnamemodify(buf_name, ':h')
+  local partial = completion.get_include_partial(line)
+  local candidates = completion.list_include_candidates(base_dir, partial)
+
+  if #candidates > 0 then
+    callback({ items = candidates, isIncomplete = true })
+  end
+end
+
 --- nvim-cmp にソースを登録する
 --- CVG ファイルでは preselect を無効化し、Enter は明示選択時のみ確定する
 --- @param opts table|nil プラグイン設定（opts.debounce で補完遅延を指定）
@@ -98,6 +152,9 @@ function M.setup(opts)
   -- デーモン経由LSP補完ソースを登録
   local lsp_completion = require('lcvgc.lsp.completion')
   cmp.register_source('lcvgc_lsp', lsp_completion.new())
+
+  -- include パス補完ソースを登録
+  cmp.register_source('lcvgc_include', include_source.new())
   cmp.setup.filetype('cvg', {
     preselect = cmp.PreselectMode.None,
     mapping = cmp.mapping.preset.insert({
@@ -107,6 +164,7 @@ function M.setup(opts)
       debounce = debounce,
     },
     sources = {
+      { name = 'lcvgc_include' },
       { name = 'lcvgc' },
       { name = 'lcvgc_lsp' },
     },
@@ -117,6 +175,12 @@ end
 --- @return table source インスタンス
 function M.new()
   return source.new()
+end
+
+--- テスト用: include ソースインスタンスを生成する
+--- @return table source インスタンス
+function M.new_include()
+  return include_source.new()
 end
 
 return M

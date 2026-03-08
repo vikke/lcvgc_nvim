@@ -41,6 +41,8 @@ vim_mock.fn = {
   line = function() return 1 end,
   col = function() return 1 end,
   complete = function() end,
+  readdir = function() return {} end,
+  isdirectory = function() return 0 end,
   json_encode = function(v)
     -- 簡易 JSON エンコード (テスト用)
     if type(v) == "table" then
@@ -155,6 +157,14 @@ vim_mock.tbl_deep_extend = function(_behavior, ...)
     end
   end
   return result
+end
+
+-- vim.tbl_contains
+vim_mock.tbl_contains = function(t, val)
+  for _, v in ipairs(t) do
+    if v == val then return true end
+  end
+  return false
 end
 
 -- vim.split

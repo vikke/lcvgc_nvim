@@ -196,6 +196,82 @@ describe("lcvgc.cmp_source", function()
       assert.is_false(callback_called)
     end)
 
+    it("include コンテキスト → cvg ファイル候補を返す", function()
+      local saved_readdir = vim.fn.readdir
+      local saved_isdirectory = vim.fn.isdirectory
+      local saved_buf_get_name = vim.api.nvim_buf_get_name
+
+      vim.api.nvim_buf_get_name = function() return "/project/main.cvg" end
+      vim.fn.readdir = function(path)
+        if path == "/project" then
+          return { "bass.cvg", "drums.cvg", "lib" }
+        end
+        return {}
+      end
+      vim.fn.isdirectory = function(path)
+        if path == "/project/lib" then return 1 end
+        return 0
+      end
+
+      local include_source = cmp_source.new_include()
+      local callback_result = nil
+      local params = {
+        context = {
+          cursor_before_line = 'include ',
+          bufnr = 1,
+        },
+      }
+
+      include_source:complete(params, function(result)
+        callback_result = result
+      end)
+
+      assert.is_not_nil(callback_result)
+      assert.equals(3, #callback_result.items)
+      assert.equals("bass.cvg", callback_result.items[1].label)
+      assert.equals("drums.cvg", callback_result.items[2].label)
+      assert.equals("lib/", callback_result.items[3].label)
+      assert.is_true(callback_result.isIncomplete)
+
+      vim.fn.readdir = saved_readdir
+      vim.fn.isdirectory = saved_isdirectory
+      vim.api.nvim_buf_get_name = saved_buf_get_name
+    end)
+
+    it("include コンテキスト + バッファ名なし → callback 未呼出", function()
+      local saved_buf_get_name = vim.api.nvim_buf_get_name
+      vim.api.nvim_buf_get_name = function() return "" end
+
+      local include_source = cmp_source.new_include()
+      local callback_called = false
+      local params = {
+        context = {
+          cursor_before_line = 'include ',
+          bufnr = 1,
+        },
+      }
+
+      include_source:complete(params, function()
+        callback_called = true
+      end)
+
+      assert.is_false(callback_called)
+
+      vim.api.nvim_buf_get_name = saved_buf_get_name
+    end)
+
+    it("include ソースの trigger characters に '/' を含む", function()
+      local include_source = cmp_source.new_include()
+      local chars = include_source:get_trigger_characters()
+      assert.is_true(vim.tbl_contains(chars, '/'))
+      assert.is_true(vim.tbl_contains(chars, ' '))
+    end)
+
+    it("include ソースの debug name は 'lcvgc_include'", function()
+      local include_source = cmp_source.new_include()
+      assert.equals("lcvgc_include", include_source:get_debug_name())
+    end)
+
     it("ポートキャッシュ空 → callback 未呼出", function()
       local ports = reload_module("lcvgc.ports")
       ports.clear_cache()
@@ -234,9 +310,10 @@ describe("lcvgc.cmp_source", function()
 
       cmp_source.setup({ debounce = 200 })
 
-      assert.equals(2, #cmp_mock.register_source_calls)
+      assert.equals(3, #cmp_mock.register_source_calls)
       assert.equals("lcvgc", cmp_mock.register_source_calls[1].name)
       assert.equals("lcvgc_lsp", cmp_mock.register_source_calls[2].name)
+      assert.equals("lcvgc_include", cmp_mock.register_source_calls[3].name)
 
       assert.equals(1, #cmp_mock.filetype_calls)
       assert.equals("cvg", cmp_mock.filetype_calls[1].ft)
