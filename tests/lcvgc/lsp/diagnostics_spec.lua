@@ -132,6 +132,26 @@ describe('lcvgc.lsp.diagnostics', function()
     end)
   end)
 
+  describe('file_path付与', function()
+    it('リクエストペイロードにfile_pathが含まれる', function()
+      local captured_payload
+      setup_connection_mock(true, function(payload, handler)
+        captured_payload = payload
+        handler({
+          success = true,
+          lsp = { type = 'diagnostics', items = {} },
+        })
+        return true
+      end)
+      diagnostics = reload_module('lcvgc.lsp.diagnostics')
+
+      diagnostics.update(1)
+
+      assert.is_not_nil(captured_payload.file_path)
+      assert.are.equal('/mock/test.cvg', captured_payload.file_path)
+    end)
+  end)
+
   describe('get_namespace', function()
     it('namespace IDを返す', function()
       setup_connection_mock(true)

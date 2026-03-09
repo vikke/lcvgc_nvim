@@ -96,6 +96,7 @@ vim_mock.api = {
   nvim_get_current_line = function() return '' end,
   nvim_list_bufs = function() return {} end,
   nvim_buf_is_loaded = function() return false end,
+  nvim_buf_get_name = function() return '/mock/test.cvg' end,
 }
 
 -- vim.bo (buffer options proxy with read/write support)
