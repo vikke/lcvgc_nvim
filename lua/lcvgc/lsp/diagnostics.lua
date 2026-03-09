@@ -48,6 +48,9 @@ function M.update(bufnr)
   pending = true
 
   local payload, include_diagnostics = request.build('lsp_diagnostics', bufnr, { offset = false })
+  -- include先クリップ解決のためファイルパスを付与
+  -- Attach file path for resolving clips from included files
+  payload.file_path = vim.api.nvim_buf_get_name(bufnr)
 
   connection.request(payload, function(msg)
     pending = false

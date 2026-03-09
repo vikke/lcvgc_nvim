@@ -124,7 +124,7 @@ describe("lcvgc.cmp_source", function()
       local callback_result = nil
       local params = {
         context = {
-          cursor_before_line = '  port ',
+          cursor_before_line = '  port I',
           bufnr = 1,
         },
       }
