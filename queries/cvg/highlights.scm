@@ -63,9 +63,10 @@
 ;; ブロックの括弧
 ["{" "}"] @punctuation.bracket
 
-;; 文字列（ポート名、includeパス）
-(string) @string
-(include_stmt (string) @string.special.path)
+;; ポート名
+(port_value) @string
+;; includeパス
+(include_path) @string.special.path
 
 ;; コメント
 (comment) @comment
