@@ -12,17 +12,17 @@
 // Aggressive pattern built around root (C) with Eb, F, G
 // -------------------------------------------------------
 clip bass_main [bars 4] {
-  // 小節1: ルート連打から上昇 / Bar 1: Root repetition into ascending run
-  vbass c:2:16 c c c eb c c c f c c c g c c c
-  // 小節2: オクターブ跳躍を含むバリエーション / Bar 2: Variation with octave jumps
-  vbass c:2:16 c c:3 c:2 eb::16 eb c c f::16 f c c g f eb c:2
-  // 小節3: シンコペーションを加えたリフ / Bar 3: Syncopated riff
-  vbass c:2:16 c eb c f c eb c g::16 f eb c:2 c c c
-  // 小節4: クライマックスへ駆け上がる / Bar 4: Climbing toward climax
-  vbass c:2:16 eb f g c:3:16 g:2 f eb c:2:16 eb f g bb:2:16 g f eb
+	// 小節1: ルート連打から上昇 / Bar 1: Root repetition into ascending run
+	vbass c:2:16 c c c eb c c c f c c c g c c c
+	// 小節2: オクターブ跳躍を含むバリエーション / Bar 2: Variation with octave jumps
+	vbass c:2:16 c c:3 c:2 eb::16 eb c c f::16 f c c g f eb c:2
+	// 小節3: シンコペーションを加えたリフ / Bar 3: Syncopated riff
+	vbass c:2:16 c eb c f c eb c g::16 f eb c:2 c c c
+	// 小節4: クライマックスへ駆け上がる / Bar 4: Climbing toward climax
+	vbass c:2:16 eb f g c:3:16 g:2 f eb c:2:16 eb f g bb:2:16 g f eb
 
-  // カットオフを徐々にオープン / Cutoff sweep opening gradually
-  vbass.cutoff 40@1.1-100@4.4
+	// カットオフを徐々にオープン / Cutoff sweep opening gradually
+	vbass.cutoff 40@1.1-100@4.4
 }
 
 // -------------------------------------------------------
@@ -32,17 +32,17 @@ clip bass_main [bars 4] {
 // Sliding pitch jumps with filter sweeps
 // -------------------------------------------------------
 clip bass_acid [bars 4] {
-  // 小節1: スタッカートで歯切れよく / Bar 1: Crisp staccato hits
-  vbass c:2:16' c' c' eb:3:16' c:2:16' c' c' g:3:16' c:2:16' c' eb:3:16' c:2:16' f:3:16' c:2:16' c' c'
-  // 小節2: 跳躍パターン / Bar 2: Leap pattern
-  vbass c:2:16' g:3:16' c:2:16' eb:3:16' c:2:16' bb:2:16' c:2:16' f:3:16' c:2:16' g:3:16' eb:3:16' c:2:16' c' g:3:16' c:2:16' c'
-  // 小節3: 前半リピート / Bar 3: Repeating first half
-  vbass (c:2:16' c' eb:3:16' g:3:16')*4
-  // 小節4: 下降してリセット / Bar 4: Descending reset
-  vbass g:3:16' f:3:16' eb:3:16' c:3:16' bb:2:16' g:2:16' f:2:16' eb:2:16' c:2:16' c' c' c' c' c' c' c'
+	// 小節1: スタッカートで歯切れよく / Bar 1: Crisp staccato hits
+	vbass c:2:16' c' c' eb:3:16' c:2:16' c' c' g:3:16' c:2:16' c' eb:3:16' c:2:16' f:3:16' c:2:16' c' c'
+	// 小節2: 跳躍パターン / Bar 2: Leap pattern
+	vbass c:2:16' g:3:16' c:2:16' eb:3:16' c:2:16' bb:2:16' c:2:16' f:3:16' c:2:16' g:3:16' eb:3:16' c:2:16' c' g:3:16' c:2:16' c'
+	// 小節3: 前半リピート / Bar 3: Repeating first half
+	vbass (c:2:16' c' eb:3:16' g:3:16')*4
+	// 小節4: 下降してリセット / Bar 4: Descending reset
+	vbass g:3:16' f:3:16' eb:3:16' c:3:16' bb:2:16' g:2:16' f:2:16' eb:2:16' c:2:16' c' c' c' c' c' c' c'
 
-  // フィルタースウィープを2回 / Two filter sweeps
-  vbass.cutoff 20@1.1-exp127@2.4 60@3.1-exp127@4.4
+	// フィルタースウィープを2回 / Two filter sweeps
+	vbass.cutoff 20@1.1-exp127@2.4 60@3.1-exp127@4.4
 }
 
 // -------------------------------------------------------
@@ -52,17 +52,17 @@ clip bass_acid [bars 4] {
 // Simple low-end pattern centered on root
 // -------------------------------------------------------
 clip bass_sub [bars 4] {
-  // 小節1: ルート全音符 / Bar 1: Root whole note
-  vbass c:1:1
-  // 小節2: ルート全音符 / Bar 2: Root whole note
-  vbass c:1:1
-  // 小節3: 5度へ移動 / Bar 3: Move to 5th
-  vbass g:1:2 f:1:2
-  // 小節4: ルートへ帰還 / Bar 4: Return to root
-  vbass eb:1:2 c:1:2
+	// 小節1: ルート全音符 / Bar 1: Root whole note
+	vbass c:1:1
+	// 小節2: ルート全音符 / Bar 2: Root whole note
+	vbass c:1:1
+	// 小節3: 5度へ移動 / Bar 3: Move to 5th
+	vbass g:1:2 f:1:2
+	// 小節4: ルートへ帰還 / Bar 4: Return to root
+	vbass eb:1:2 c:1:2
 
-  // カットオフを低く固定 / Cutoff fixed low
-  vbass.cutoff 30@1.1
+	// カットオフを低く固定 / Cutoff fixed low
+	vbass.cutoff 30@1.1
 }
 
 // -------------------------------------------------------
@@ -72,15 +72,15 @@ clip bass_sub [bars 4] {
 // Rhythmic 8th note staccato stabs
 // -------------------------------------------------------
 clip bass_stab [bars 4] {
-  // 小節1: スタブ+休符 / Bar 1: Stabs with rests
-  vbass c:2:8' r:8 eb:2:8' r:8 c:2:8' r:8 g:2:8' r:8
-  // 小節2: 密度を上げる / Bar 2: Increasing density
-  vbass c:2:8' eb:2:8' r:8 f:2:8' c:2:8' r:8 g:2:8' r:8
-  // 小節3: 小節1の反復 / Bar 3: Repeat of bar 1
-  vbass c:2:8' r:8 eb:2:8' r:8 c:2:8' r:8 g:2:8' r:8
-  // 小節4: フィルを入れて締める / Bar 4: Fill to close
-  vbass c:2:8' eb:2:8' f:2:8' g:2:8' bb:2:8' g:2:8' f:2:8' eb:2:8'
+	// 小節1: スタブ+休符 / Bar 1: Stabs with rests
+	vbass c:2:8' r:8 eb:2:8' r:8 c:2:8' r:8 g:2:8' r:8
+	// 小節2: 密度を上げる / Bar 2: Increasing density
+	vbass c:2:8' eb:2:8' r:8 f:2:8' c:2:8' r:8 g:2:8' r:8
+	// 小節3: 小節1の反復 / Bar 3: Repeat of bar 1
+	vbass c:2:8' r:8 eb:2:8' r:8 c:2:8' r:8 g:2:8' r:8
+	// 小節4: フィルを入れて締める / Bar 4: Fill to close
+	vbass c:2:8' eb:2:8' f:2:8' g:2:8' bb:2:8' g:2:8' f:2:8' eb:2:8'
 
-  // カットオフを波打たせる / Cutoff with wave-like motion
-  vbass.cutoff 80@1.1-40@2.4 80@3.1-40@4.4
+	// カットオフを波打たせる / Cutoff with wave-like motion
+	vbass.cutoff 80@1.1-40@2.4 80@3.1-40@4.4
 }

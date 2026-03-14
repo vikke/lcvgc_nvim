@@ -33,15 +33,15 @@ include ./sample_fm.cvg
 
 
 device volca_drum {
-  port volca drum
+	port volca drum
 }
 
 device volca_bass {
-  port volca bass
+	port volca bass
 }
 
 device volca_fm {
-  port volca fm
+	port volca fm
 }
 
 // ------------------------------------------------------------
@@ -49,13 +49,13 @@ device volca_fm {
 // ------------------------------------------------------------
 
 kit vdrum {
-  device volca_drum
-  bd { channel 10, note c2 }
-  sd { channel 10, note d2 }
-  lt { channel 10, note e2 }
-  ht { channel 10, note f2 }
-  oh { channel 10, note g2 }
-  hh { channel 10, note a2 }
+	device volca_drum
+	bd { channel 10, note c2 }
+	sd { channel 10, note d2 }
+	lt { channel 10, note e2 }
+	ht { channel 10, note f2 }
+	oh { channel 10, note g2 }
+	hh { channel 10, note a2 }
 }
 
 // ------------------------------------------------------------
@@ -65,32 +65,32 @@ kit vdrum {
 // Volca Bass - アシッドベースライン用
 // Volca Bass - for acid basslines
 instrument vbass {
-  device volca_bass
-  channel 1
-  gate_normal 80
-  gate_staccato 30
-  cc cutoff 44
-  cc lfo_rate 48
-  cc lfo_int 49
-  cc attack 46
-  cc decay 47
-  cc slide 5
+	device volca_bass
+	channel 1
+	gate_normal 80
+	gate_staccato 30
+	cc cutoff 44
+	cc lfo_rate 48
+	cc lfo_int 49
+	cc attack 46
+	cc decay 47
+	cc slide 5
 }
 
 // Volca FM - パッド・スタブ・リード・アルペジオ用
 // Volca FM - for pads, stabs, leads, and arpeggios
 instrument vfm {
-  device volca_fm
-  channel 2
-  gate_normal 90
-  gate_staccato 20
-  cc mod_attack 42
-  cc mod_decay 43
-  cc car_attack 44
-  cc car_decay 45
-  cc algorithm 65
-  cc lfo_rate 46
-  cc lfo_pitch 47
+	device volca_fm
+	channel 2
+	gate_normal 90
+	gate_staccato 20
+	cc mod_attack 42
+	cc mod_decay 43
+	cc car_attack 44
+	cc car_decay 45
+	cc algorithm 65
+	cc lfo_rate 46
+	cc lfo_pitch 47
 }
 
 // ------------------------------------------------------------
@@ -110,50 +110,50 @@ scale c minor
 // イントロ: 静かなドラムブレイク + サブベース + FMパッド
 // Intro: quiet drum break + sub bass + FM pad
 scene intro {
-  drums_break
-  bass_sub
-  fm_pad
+	drums_break
+	bass_sub
+	fm_pad
 }
 
 // ビルドアップ: テンポを少し上げてテンションを高める
 // Buildup: slight tempo increase to raise tension
 scene buildup {
-  drums_buildup
-  bass_main
-  fm_stab
-  tempo +2
+	drums_buildup
+	bass_main
+	fm_stab
+	tempo +2
 }
 
 // ドロップA: メインドラム + アシッドベース + FMスタブ
 // Drop A: main drums + acid bass + FM stab
 scene drop_a {
-  drums_main
-  bass_acid
-  fm_stab
+	drums_main
+	bass_acid
+	fm_stab
 }
 
 // ドロップB: メインドラム + メインベース + FMリード
 // Drop B: main drums + main bass + FM lead
 scene drop_b {
-  drums_main
-  bass_main
-  fm_lead
+	drums_main
+	bass_main
+	fm_lead
 }
 
 // ブレイクダウン: ドラムブレイク + サブベース + FMパッド
 // Breakdown: drum break + sub bass + FM pad
 scene breakdown {
-  drums_break
-  bass_sub
-  fm_pad
+	drums_break
+	bass_sub
+	fm_pad
 }
 
 // アウトロ: メインドラム + サブベース + FMアルペジオ
 // Outro: main drums + sub bass + FM arpeggio
 scene outro {
-  drums_main
-  bass_sub
-  fm_arp
+	drums_main
+	bass_sub
+	fm_arp
 }
 
 // ------------------------------------------------------------
@@ -162,15 +162,14 @@ scene outro {
 // 楽曲全体の構成を定義します。
 // Defines the overall arrangement of the track.
 // ------------------------------------------------------------
-
 session main {
-  intro [repeat 4]
-  buildup [repeat 2]
-  drop_a [repeat 4]
-  breakdown [repeat 2]
-  buildup [repeat 2]
-  drop_b [repeat 4]
-  breakdown [repeat 2]
-  drop_a [repeat 2]
-  outro [repeat 4]
+	intro [repeat 4]
+	buildup [repeat 2]
+	drop_a [repeat 4]
+	breakdown [repeat 2]
+	buildup [repeat 2]
+	drop_b [repeat 4]
+	breakdown [repeat 2]
+	drop_a [repeat 2]
+	outro [repeat 4]
 }
